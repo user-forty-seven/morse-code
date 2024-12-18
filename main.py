@@ -70,16 +70,23 @@ else:
 
 user_input = input("Enter you input. In case of morse code, use / to seperate letters\n>>> ")
 
-list_raw = list()
+list_input = []
 
 list_temp_storage = []
 
 
 def morse_code_to_english():
-    list_raw = user_input.split("/")
+    list_input = user_input.split(" ")
     try:
-
-        for i in list_raw:
+        for i in list_input:
+            if "/" in i:
+                temp_index = list_input.index(i)
+                to_operate = i.replace("/", " ").split(" ")
+                list_input.pop(temp_index)
+                list_input.insert(temp_index, to_operate[1])
+                list_input.insert(temp_index, "")
+                list_input.insert(temp_index, to_operate[0])
+        for i in list_input:
             list_temp_storage.append(morse_code[i])
 
     except Exception as e:
@@ -90,21 +97,21 @@ def morse_code_to_english():
 
 
 def english_to_morse_code():
-    list_raw = user_input.split(" ")
-    list_raw_formatted = list(filter(None, list_raw))
+    list_input = user_input.split(" ")
+    list_input_formatted = list(filter(None, list_input))
 
 
     try:
-        for i in list_raw_formatted:
+        for i in list_input_formatted:
             for a in range(len(i)):
                 value_to_find = i[a] #value -> english
                 for key, value in morse_code.items():
                     if value_to_find.upper() == value:
                         list_temp_storage.append(key)
                         if a == len(i)-1:
-                            list_temp_storage.append("//")
-                        else:
                             list_temp_storage.append("/")
+                        else:
+                            list_temp_storage.append(" ")
                         break
 
     except Exception as e:
@@ -122,3 +129,4 @@ if mode == "mte":
 elif mode == "etm":
     result_morse = english_to_morse_code()
     print(result_morse)
+    
